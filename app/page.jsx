@@ -1,9 +1,9 @@
-import Connect from '../components/Connect';
+import FormSelector from '../components/FormSelector';
 import axios from 'axios';
 
-const fetchKoboData = async () => {
-  const token = process.env.TOKEN;
-  // console.log(token);
+const token = process.env.TOKEN;
+
+const fetchKoboForms = async () => {
   const url = "https://kf.kobotoolbox.org/api/v2/assets.json"; // Replace with your actual kpi URL
   const headers = { "Authorization": `Token ${token}` };
   try {
@@ -12,33 +12,33 @@ const fetchKoboData = async () => {
     return response.data.results;
   } catch (error) {
     if (!error.response)
-      console.log(`Error: ${error.message}`);
+      console.error(`Error: ${error.message}`);
 
-    console.log(error.response.data);
-    console.log(error.response.status);
-    console.log(error.response.headers);
+    console.error(error.response.data);
+    console.error(error.response.status);
+    console.error(error.response.headers);
   }
 };
 
 const Home = async () => {
-  const results = await fetchKoboData();
-  // console.log(results);
+  const forms = await fetchKoboForms();
+  // console.log(forms);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-16">
-      <h1 className='mb-3'>
-        Kobo Formular
+    <main className="">
+      <h1 className='mb-2'>
+        My Kobo Forms
       </h1>
 
-      <div>
+      {/* <div>
         <ul>
-          {results && results.map(result => (
-            <li key={result.uid}>{result.name}</li>
+          {forms && forms.map(result => (
+            <li key={result.uid}>{result.name} | <span style={{ color: 'red' }}>{result.uid}</span></li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
-      {/* <Connect token={token} /> */}
+      {forms && <FormSelector token={token} forms={forms} />}
     </main>
   )
 }
